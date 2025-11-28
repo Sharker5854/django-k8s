@@ -8,7 +8,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository | lower }}
+  IMAGE_NAME: sharker5854/django-k8s
   K8S_NAMESPACE: django-app
 
 jobs:
