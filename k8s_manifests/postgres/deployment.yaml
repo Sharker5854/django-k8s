@@ -43,5 +43,6 @@ spec:
             cpu: "500m"
       volumes:
       - name: postgres-storage
-        persistentVolumeClaim:
-          claimName: postgres-pvc
+        hostPath:
+          path: /tmp/postgres-data
+          type: DirectoryOrCreate

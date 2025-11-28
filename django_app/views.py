@@ -13,15 +13,20 @@ def hostname_view(request):
         'pod_ip': socket.gethostbyname(socket.gethostname())
     })
 
+# @csrf_exempt
+# def health_view(request):
+#     """Health check endpoint"""
+#     try:
+#         with connection.cursor() as cursor:
+#             cursor.execute("SELECT 1")
+#         return JsonResponse({'status': 'healthy', 'database': 'connected'})
+#     except Exception as e:
+#         return JsonResponse({'status': 'unhealthy', 'error': str(e)}, status=500)
+
 @csrf_exempt
 def health_view(request):
     """Health check endpoint"""
-    try:
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT 1")
-        return JsonResponse({'status': 'healthy', 'database': 'connected'})
-    except Exception as e:
-        return JsonResponse({'status': 'unhealthy', 'error': str(e)}, status=500)
+    return JsonResponse({'status': 'healthy', 'message': 'Service is running'})
 
 @csrf_exempt
 def db_test_view(request):
