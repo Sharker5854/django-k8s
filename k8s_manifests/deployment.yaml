@@ -23,8 +23,7 @@ spec:
       - name: ghcr-secret
       containers:
       - name: django-app
-        image: django-k8s:latest
-        imagePullPolicy: Never
+        image: ghcr.io/sharker5854/django-k8s:latest
         ports:
         - containerPort: 8000
         env:
