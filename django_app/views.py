@@ -1,56 +1,61 @@
 import socket
 import json
-from django.http import JsonResponse
+from random import randint
+from django.http import JsonResponse, HttpResponse
 from django.db import connection
 from django.views.decorators.csrf import csrf_exempt
 
+
+
 @csrf_exempt
-def hostname_view(request):
-    """Основная страница с hostname для проверки балансировки"""
+def check_hostname(request):
     return JsonResponse({
-        'message': 'Hello from Django with Vault and PostgreSQL!',
-        'hostname': socket.gethostname(),
-        'pod_ip': socket.gethostbyname(socket.gethostname())
+        'msg': 'Wassup Universe',
+        'hostname': socket.gethostname()
     })
 
-# @csrf_exempt
-# def health_view(request):
-#     """Health check endpoint"""
-#     try:
-#         with connection.cursor() as cursor:
-#             cursor.execute("SELECT 1")
-#         return JsonResponse({'status': 'healthy', 'database': 'connected'})
-#     except Exception as e:
-#         return JsonResponse({'status': 'unhealthy', 'error': str(e)}, status=500)
+@csrf_exempt
+def healthcheck(request):
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+        return JsonResponse({'status': 'БД и приложуха доступны'})
+    except Exception as e:
+        return JsonResponse({'status': 'произошла какая-то ошибка', 'error': str(e)}, status=500)
+
 
 @csrf_exempt
-def health_view(request):
-    """Health check endpoint"""
-    return JsonResponse({'status': 'healthy', 'message': 'Service is running'})
-
-@csrf_exempt
-def db_test_view(request):
-    """Тестовый endpoint для работы с БД"""
+def change_db(request):
     try:
         with connection.cursor() as cursor:
             cursor.execute("""
-                CREATE TABLE IF NOT EXISTS visits (
+                CREATE TABLE IF NOT EXISTS winners (
                     id SERIAL PRIMARY KEY,
                     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    message TEXT
+                    prize INT
                 )
             """)
             cursor.execute(
-                "INSERT INTO visits (message) VALUES (%s)",
-                [f"Visit from {socket.gethostname()}"]
+                "INSERT INTO winners (prize) VALUES (%s)",
+                [str(randint(1, 1000))]
             )
-            cursor.execute("SELECT COUNT(*) FROM visits")
-            count = cursor.fetchone()[0]
+            cursor.execute("SELECT * FROM winners")
+            prize = cursor.fetchone()[0]
 
-        return JsonResponse({
-            'hostname': socket.gethostname(),
-            'total_visits': count,
-            'message': 'Database operation completed successfully'
-        })
+            html_content = f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Как же он хорош</title>
+            </head>
+            <body>
+                <h1>Твой приз: ${prize}</h1>
+                <h3>Сервер: {socket.gethostname()}</h3>
+            </body>
+            </html>
+            """
+            
+            return HttpResponse(html_content, content_type='text/html; charset=utf-8')
+
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)

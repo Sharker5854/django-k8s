@@ -68,7 +68,3 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Функция для получения hostname (для проверки балансировки)
-def get_hostname():
-    return socket.gethostname()
