@@ -21,6 +21,7 @@ def healthcheck(request):
             cursor.execute("SELECT 1")
         return JsonResponse({'status': 'БД и приложуха доступны'})
     except Exception as e:
+        print(e)
         return JsonResponse({'status': 'произошла какая-то ошибка', 'error': str(e)}, status=500)
 
 
