@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def check_hostname(request):
     return JsonResponse({
-        'msg': 'Wassup Universe!',
+        'msg': 'Wassup Universe!!',
         'hostname': socket.gethostname()
     })
 
