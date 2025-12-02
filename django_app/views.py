@@ -16,13 +16,7 @@ def check_hostname(request):
 
 @csrf_exempt
 def healthcheck(request):
-    try:
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT 1")
-        return JsonResponse({'status': 'БД и приложуха доступны'})
-    except Exception as e:
-        print(e)
-        return JsonResponse({'status': 'произошла какая-то ошибка', 'error': str(e)}, status=500)
+    return JsonResponse({'status': 'ok', 'service': 'django-app'})
 
 
 @csrf_exempt

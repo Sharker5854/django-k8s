@@ -11,7 +11,12 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY manage.py .
+COPY README.md .
+COPY django_app/ ./django_app/
+COPY django-app-chart/ ./django-app-chart/
+COPY k8s_manifests/ ./k8s_manifests/
+COPY .github/ ./.github/
 
 RUN python manage.py collectstatic --noinput
 

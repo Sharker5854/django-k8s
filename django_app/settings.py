@@ -68,3 +68,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+PROMETHEUS_EXPORT_MIGRATIONS = False
